@@ -1,4 +1,4 @@
-![Alt text](https://github.com/MCarlomagno/flutter_core_architecture/IMG_20200618_000609.png?raw=true "Title")
+![Alt text](https://raw.githubusercontent.com/MCarlomagno/flutter_core_architecture/master/IMG_20200618_000609.png "Title")
 
 # kidd_video_player
 
