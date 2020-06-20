@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:video_player/video_player.dart';
 
 class VideoControllerService {
@@ -9,11 +10,13 @@ class VideoControllerService {
     return _videoControllerService;
   }
 
+  // stream that listen the controller.position value
+  Stream<Duration> get streamToProgress => this._controller.position.asStream();
+
   VideoPlayerController _controller;
   VideoPlayerController get controller => this._controller;
 
   VideoPlayerValue get value => _controller.value;
-  Future<Duration> get position => _controller.position;
 
   void setController(VideoPlayerController controller) {
     this._controller = controller;
@@ -21,6 +24,8 @@ class VideoControllerService {
 
   Future<void> initializeController() async {
     await this._controller.initialize();
+    // Use the controller to loop the video.
+    await _controller.setLooping(false);
   }
 
   Future<void> playVideo() {
@@ -47,3 +52,4 @@ class VideoControllerService {
     this._controller.dispose();
   }
 }
+
