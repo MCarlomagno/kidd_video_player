@@ -10,11 +10,15 @@ class VideoControllerService {
     return _videoControllerService;
   }
 
-  // stream that listen the controller.position value
-  Stream<Duration> get streamToProgress => this._controller.position.asStream();
 
   VideoPlayerController _controller;
   VideoPlayerController get controller => this._controller;
+
+  // stream that listen the controller.position value
+  Stream<Duration> get streamToProgress => this._controller.position.asStream();
+
+  // stream that listen the controller value
+  List<DurationRange> get buffered => this._controller.value.buffered;
 
   VideoPlayerValue get value => _controller.value;
 
@@ -52,4 +56,3 @@ class VideoControllerService {
     this._controller.dispose();
   }
 }
-

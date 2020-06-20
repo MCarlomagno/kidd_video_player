@@ -17,8 +17,10 @@ import 'layout.dart';
 ///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class KiddVideoPlayer extends StatefulWidget {
-  const KiddVideoPlayer({Key key, @required this.file}) : super(key: key);
-  final File file;
+  const KiddVideoPlayer({Key key, this.videoFile, this.videoUrl, @required this.fromUrl}) : super(key: key);
+  final File videoFile;
+  final String videoUrl;
+  final bool fromUrl;
 
   @override
   _KiddVideoPlayerState createState() => _KiddVideoPlayerState();
@@ -33,14 +35,18 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _videoControllerService.setController(VideoPlayerController.file(widget.file));
+    if (widget.fromUrl) {
+      _videoControllerService.setController(VideoPlayerController.network(widget.videoUrl));
+    } else {
+      _videoControllerService.setController(VideoPlayerController.file(widget.videoFile));
+    }
+
     _videoControllerService.initializeController().then((value) {
       setState(() {
         isBusy = false;
       });
     });
     _child = Layout(
-      file: widget.file,
       isFullScreen: isFullScreen,
       onFullScreen: onFullScreen,
     );
@@ -52,7 +58,6 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
     videoPositionInMiliseconds = await Navigator.push(context, MaterialPageRoute(builder: (_) {
       return FullScreen(
         child: Layout(
-          file: widget.file,
           isFullScreen: isFullScreen,
           videoPositionInMiliseconds: videoPositionInMiliseconds,
         ),

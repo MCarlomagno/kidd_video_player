@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kidd_video_player/video_controller_service/video_controller_service.dart';
 import 'package:video_player/video_player.dart';
@@ -15,12 +14,10 @@ import 'package:video_player/video_player.dart';
 class Layout extends StatefulWidget {
   const Layout(
       {Key key,
-      @required this.file,
       @required this.isFullScreen,
       this.onFullScreen,
       this.videoPositionInMiliseconds = 0})
       : super(key: key);
-  final File file;
   final Function(int) onFullScreen;
   final bool isFullScreen;
   final int videoPositionInMiliseconds;
