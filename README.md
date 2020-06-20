@@ -4,6 +4,11 @@
 
 A new Flutter package project.
 
+# considerations:
+ensure to have android:usesCleartextTraffic="true" in the mainfest application tag on android and 
+
+<uses-permission android:name="android.permission.INTERNET"/>
+
 ## Getting Started
 
 This project is a starting point for a Dart
