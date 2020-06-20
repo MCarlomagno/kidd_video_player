@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kidd_video_player/video_controller_service/video_controller_service.dart';
 import 'package:video_player/video_player.dart';
 
 ///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -14,29 +15,32 @@ import 'package:video_player/video_player.dart';
 
 class KiddVideoPlayer extends StatefulWidget {
   const KiddVideoPlayer(
-      {Key key, @required this.file, @required this.isFullScreen, @required this.controller, this.onFullScreen})
+      {Key key,
+      @required this.file,
+      @required this.isFullScreen,
+      this.onFullScreen,
+      this.videoPositionInMiliseconds = 0})
       : super(key: key);
   final File file;
-  final VoidCallback onFullScreen;
+  final Function(int) onFullScreen;
   final bool isFullScreen;
-  final VideoPlayerController controller;
+  final int videoPositionInMiliseconds;
 
   @override
   _KiddVideoPlayerState createState() => _KiddVideoPlayerState();
 }
 
 class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
+  VideoControllerService _videoControllerService = VideoControllerService();
 
   Future<void> _initializeVideoPlayerFuture;
   Future<void> get initializeVideoPlayerFuture => this._initializeVideoPlayerFuture;
 
   // stream that listen the controller.position value
-  Stream<Duration> _streamToProgress;
   StreamSubscription _streamSubscriptionToProgress;
 
   // video progress
-  int _videoPositionInMiliseconds = 0;
-  int get videoPositionInMiliseconds => this._videoPositionInMiliseconds;
+  int _videoPositionInMiliseconds;
 
   // shows play/pause button and video progress
   bool _showControls = true;
@@ -51,6 +55,9 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   @override
   void initState() {
     super.initState();
+    // Initialize the controller and store the Future for later use.
+    _videoPositionInMiliseconds = widget.videoPositionInMiliseconds;
+    //_onVideoPositionChanged(widget.videoPositionInMiliseconds);
   }
 
   @override
@@ -71,11 +78,11 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
               color: Colors.black,
               child: Center(
                 child: AspectRatio(
-                  aspectRatio: widget.controller.value.aspectRatio,
+                  aspectRatio: _videoControllerService.value.aspectRatio,
                   // Use the VideoPlayer widget to display the video.
                   child: Hero(
                     tag: 'myTag',
-                    child: VideoPlayer(widget.controller),
+                    child: VideoPlayer(_videoControllerService.controller),
                   ),
                 ),
               ),
@@ -92,7 +99,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
                     children: <Widget>[
                       IconButton(
                         icon: Icon(
-                          widget.controller.value.volume == 0.0 ? Icons.volume_off : Icons.volume_up,
+                          _videoControllerService.value.volume == 0.0 ? Icons.volume_off : Icons.volume_up,
                           size: 20,
                           color: Colors.white,
                         ),
@@ -106,7 +113,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
                         onChanged: (val) {
                           _onVolumeChanged(val);
                         },
-                        value: widget.controller.value.volume,
+                        value: _videoControllerService.value.volume,
                         min: 0.0,
                         max: 1.0,
                       ),
@@ -118,26 +125,26 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
                           ),
                           onPressed: () {
                             if (widget.isFullScreen) {
-                              Navigator.pop(context);
+                              Navigator.pop(context, _videoPositionInMiliseconds);
                             } else {
-                              widget.onFullScreen();
+                              widget.onFullScreen(_videoPositionInMiliseconds);
                             }
                           })
                     ],
                   ),
                 ),
                 Spacer(),
-                widget.controller != null
+                _videoControllerService.controller != null
                     ? Padding(
                         padding: EdgeInsets.symmetric(horizontal: 25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              _printDuration(Duration(milliseconds: videoPositionInMiliseconds)),
+                              _printDuration(Duration(milliseconds: _videoPositionInMiliseconds)),
                               style: TextStyle(color: Colors.white),
                             ),
-                            Text(_printDuration(widget.controller.value.duration),
+                            Text(_printDuration(_videoControllerService.value.duration),
                                 style: TextStyle(color: Colors.white)),
                           ],
                         ),
@@ -146,14 +153,14 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
                 Slider(
                   inactiveColor: Colors.grey[400],
                   activeColor: Theme.of(context).accentColor,
-                  value: videoPositionInMiliseconds.toDouble(),
+                  value: _videoPositionInMiliseconds.toDouble(),
                   onChanged: (value) {
                     _onVideoPositionChanged(value);
                   },
                   min: 0.0,
-                  max: widget.controller.value.duration != null
-                      ? widget.controller.value.duration.inMilliseconds.toDouble()
-                      : 0,
+                  max: _videoControllerService.value.duration != null
+                      ? _videoControllerService.value.duration.inMilliseconds.toDouble()
+                      : _videoPositionInMiliseconds.toDouble(),
                   label: 'Video',
                 ),
               ],
@@ -171,7 +178,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
                 },
                 // Display the correct icon depending on the state of the player.
                 icon: Icon(
-                  widget.controller.value.isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
+                  _videoControllerService.value.isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
                   color: Colors.white,
                 ), // This trailing comma makes auto-formatting nicer for build methods.
               ),
@@ -183,9 +190,8 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   }
 
   startStreaming() {
-    _streamToProgress = this.widget.controller.position.asStream();
-    _streamSubscriptionToProgress = _streamToProgress.listen((event) {
-      if (widget.controller.value.duration.inMilliseconds.toDouble() > event.inMilliseconds.toDouble()) {
+    this._videoControllerService.streamToProgress.listen((event) {
+      if (_videoControllerService.value.duration.inMilliseconds.toDouble() > event.inMilliseconds.toDouble()) {
         setState(() {
           _videoPositionInMiliseconds = event.inMilliseconds;
         });
@@ -216,21 +222,21 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   }
 
   _onVolumePressed() {
-    if (widget.controller.value.volume != 0) {
-      widget.controller.setVolume(0.0);
+    if (_videoControllerService.value.volume != 0) {
+      _videoControllerService.setVolume(0.0);
     } else {
-      widget.controller.setVolume(_lastVolume);
+      _videoControllerService.setVolume(_lastVolume);
     }
   }
 
   _onPlayButtonPressed() {
     onTapScreen();
     // If the video is playing, pause it.
-    if (widget.controller.value.isPlaying) {
-      widget.controller.pause();
+    if (_videoControllerService.value.isPlaying) {
+      _videoControllerService.pauseVideo();
     } else {
       // If the video is paused, play it.
-      widget.controller.play();
+      _videoControllerService.playVideo();
     }
     setState(() {});
   }
@@ -238,8 +244,8 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   _onVideoPositionChanged(value) {
     onTapScreen();
     var duration = Duration(milliseconds: value.floor());
-    widget.controller.seekTo(duration);
-    if (widget.controller.value.duration.inMilliseconds.toDouble() > value.floor().toDouble()) {
+    _videoControllerService.seekTo(duration);
+    if (_videoControllerService.value.duration.inMilliseconds.toDouble() > value.floor().toDouble()) {
       _videoPositionInMiliseconds = value.floor();
     }
     setState(() {});
@@ -262,15 +268,15 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
 
   _onVolumeChanged(val) {
     _lastVolume = val;
-    widget.controller.setVolume(val);
+    _videoControllerService.setVolume(val);
     onTapScreen();
   }
 
   @override
   void dispose() {
     // Ensure disposing of the VideoPlayerController to free up resources.
-    this._timer.cancel();
-    this._streamSubscriptionToProgress.cancel();
+    this._timer?.cancel();
+    this._streamSubscriptionToProgress?.cancel();
     super.dispose();
   }
 }
@@ -294,61 +300,61 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   Widget _child;
   bool isFullScreen = false;
-  bool _isBusy = true;
-
-  VideoPlayerController _controller;
+  VideoControllerService _videoControllerService = VideoControllerService();
+  bool isBusy = true;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(widget.file);
-    // Initialize the controller and store the Future for later use.
-    _controller.initialize().then((value) {
-      // Use the controller to loop the video.
-      _controller.setLooping(false);
+    _videoControllerService.setController(VideoPlayerController.file(widget.file));
+    _videoControllerService.initializeController().then((value) {
       setState(() {
-        _isBusy = false;
+        isBusy = false;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void onFullScreen() {
-    isFullScreen = true;
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return _isBusy
-          ? DetailScreen(
-              child: KiddVideoPlayer(
-                file: widget.file,
-                isFullScreen: isFullScreen,
-                controller: _controller,
-              ),
-            )
-          : Center(
-              child: CircularProgressIndicator(),
-            );
-    }));
-  }
-
-  @override
-  Widget build(BuildContext context) {
     _child = KiddVideoPlayer(
       file: widget.file,
       isFullScreen: isFullScreen,
       onFullScreen: onFullScreen,
-      controller: _controller,
     );
+  }
+
+  void onFullScreen(videoPositionInMiliseconds) async {
+    isFullScreen = true;
+
+    videoPositionInMiliseconds = await Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return FullScreen(
+        child: KiddVideoPlayer(
+          file: widget.file,
+          isFullScreen: isFullScreen,
+          videoPositionInMiliseconds: videoPositionInMiliseconds,
+        ),
+      );
+    }));
+
+    isFullScreen = false;
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
       color: Colors.black,
       height: 500,
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
-      child: _child,
+      child: !isBusy
+          ? _child
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     ));
   }
 }
@@ -361,15 +367,15 @@ class _MainScreenState extends State<MainScreen> {
 ///
 ///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class DetailScreen extends StatefulWidget {
-  const DetailScreen({Key key, @required this.child}) : super(key: key);
+class FullScreen extends StatefulWidget {
+  const FullScreen({Key key, @required this.child}) : super(key: key);
   final Widget child;
 
   @override
-  _DetailScreenState createState() => _DetailScreenState();
+  _FullScreenState createState() => _FullScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _FullScreenState extends State<FullScreen> {
   @override
   void initState() {
     super.initState();
