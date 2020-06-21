@@ -11,16 +11,57 @@ import 'layout.dart';
 ///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ///
 ///
-///                      MAIN SCREEN!
+///                      KiddVideoPlayer!
 ///
 ///
 ///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class KiddVideoPlayer extends StatefulWidget {
-  const KiddVideoPlayer({Key key, this.videoFile, this.videoUrl, @required this.fromUrl}) : super(key: key);
   final File videoFile;
+
   final String videoUrl;
+
   final bool fromUrl;
+
+  final bool showVolumeControl;
+
+  final bool showVideoControl;
+
+  final bool showFullScreenButton;
+
+  final bool inLoop;
+
+  final Color iconsColor;
+
+  final Color sliderColor;
+
+  final Color backgroundSliderColor;
+
+  final Color backgroundColor;
+
+  final Color loaderColor;
+
+  final IconData pauseIcon;
+
+  final IconData playIcon;
+
+  const KiddVideoPlayer(
+      {Key key,
+      @required this.fromUrl,
+      this.videoFile,
+      this.videoUrl,
+      this.showVolumeControl = true,
+      this.showVideoControl = true,
+      this.showFullScreenButton = true,
+      this.inLoop = false,
+      this.iconsColor = Colors.white,
+      this.sliderColor = Colors.white,
+      this.backgroundSliderColor = Colors.grey,
+      this.backgroundColor = Colors.black,
+      this.loaderColor = Colors.white,
+      this.pauseIcon = Icons.pause,
+      this.playIcon = Icons.play_arrow})
+      : super(key: key);
 
   @override
   _KiddVideoPlayerState createState() => _KiddVideoPlayerState();
@@ -41,7 +82,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
       _videoControllerService.setController(VideoPlayerController.file(widget.videoFile));
     }
 
-    _videoControllerService.initializeController().then((value) {
+    _videoControllerService.initializeController(inLoop: widget.inLoop).then((value) {
       setState(() {
         isBusy = false;
       });
@@ -49,6 +90,14 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
     _child = Layout(
       isFullScreen: isFullScreen,
       onFullScreen: onFullScreen,
+      showVolumeControl: widget.showVolumeControl,
+      showVideoControl: widget.showVideoControl,
+      showFullScreenButton: widget.showFullScreenButton,
+      iconsColor: widget.iconsColor,
+      sliderColor: widget.sliderColor,
+      backgroundSliderColor: widget.backgroundSliderColor,
+      pauseIcon: widget.pauseIcon,
+      playIcon: widget.playIcon,
     );
   }
 
@@ -57,9 +106,18 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
 
     videoPositionInMiliseconds = await Navigator.push(context, MaterialPageRoute(builder: (_) {
       return FullScreen(
+        backgroundColor: widget.backgroundColor,
         child: Layout(
           isFullScreen: isFullScreen,
-          videoPositionInMiliseconds: videoPositionInMiliseconds,
+          onFullScreen: onFullScreen,
+          showVolumeControl: widget.showVolumeControl,
+          showVideoControl: widget.showVideoControl,
+          showFullScreenButton: widget.showFullScreenButton,
+          iconsColor: widget.iconsColor,
+          sliderColor: widget.sliderColor,
+          backgroundSliderColor: widget.backgroundSliderColor,
+          pauseIcon: widget.pauseIcon,
+          playIcon: widget.playIcon,
         ),
       );
     }));
@@ -77,16 +135,19 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      color: Colors.black,
-      height: 500,
-      // Use a FutureBuilder to display a loading spinner while waiting for the
-      // VideoPlayerController to finish initializing.
-      child: !isBusy
-          ? _child
-          : Center(
-              child: CircularProgressIndicator(),
-            ),
-    ));
+      body: Container(
+        color: widget.backgroundColor,
+        height: 500,
+        // Use a FutureBuilder to display a loading spinner while waiting for the
+        // VideoPlayerController to finish initializing.
+        child: !isBusy
+            ? _child
+            : Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(widget.loaderColor),
+                ),
+              ),
+      ),
+    );
   }
 }
