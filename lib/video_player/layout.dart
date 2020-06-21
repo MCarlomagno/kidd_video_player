@@ -4,54 +4,82 @@ import 'package:kidd_video_player/models/layout_configs.dart';
 import 'package:kidd_video_player/video_controller_service/video_controller_service.dart';
 import 'package:video_player/video_player.dart';
 
-class Layout extends StatefulWidget {
-  final Function(int) onFullScreen;
+/// #### Class that contains the most of the UI content.
+/// 
+/// Class for internal functionality proposes.
+/// 
+/// It recieves 4 parameters 
+/// [onFullScreen] [isFullScreen] [videoPositionInMilliseconds] [layoutConfigs].
+/// Only assertion [isFullScreen] != null.
+/// 
+/// see also: 
+/// https://github.com/MCarlomagno/kidd_video_player
 
+class Layout extends StatefulWidget {
+
+  /// Callback to ancestor widget function to display this content on full screen.
+  final Function onFullScreen;
+
+  /// Flag in true when the video is playning on full screen.
   final bool isFullScreen;
 
-  final int videoPositionInMiliseconds;
+  /// Progress in milliseconds of the current video.
+  final int videoPositionInMilliseconds;
 
+  /// Class that contains the UI customizations
   final LayoutConfigs layoutConfigs;
 
   const Layout({
     Key key,
     @required this.isFullScreen,
     this.onFullScreen,
-    this.videoPositionInMiliseconds = 0,
+    this.videoPositionInMilliseconds = 0,
     this.layoutConfigs = LayoutConfigs.byDefault,
-  }) : super(key: key);
+  }) : assert(isFullScreen != null), super(key: key);
 
   @override
   _LayoutState createState() => _LayoutState();
 }
 
 class _LayoutState extends State<Layout> {
+
+  /// The service that manages the video player controller.
   VideoControllerService _videoControllerService = VideoControllerService();
 
-  // video progress
+  /// Progress in milliseconds of the current video.
   int _videoPositionInMiliseconds;
 
-  // shows play/pause button and video progress
+  /// shows play/pause button and video progress.
   bool _showControls = true;
 
-  // timer for hide controls
+  /// timer for hide controls after some duration.
   Timer _timer;
 
-  // if the user pressed mute, this variable record the last volume used
+  /// If the user pressed mute, this variable record the last volume setted.
   double _lastVolume = 1.0;
 
   @override
   void initState() {
     super.initState();
-    _videoPositionInMiliseconds = widget.videoPositionInMiliseconds;
+
+    // initializates the variable with the value passed by parameter
+    _videoPositionInMiliseconds = widget.videoPositionInMilliseconds;
   }
 
   @override
   Widget build(BuildContext context) {
+    // starts the streaming for video progress
     startStreaming();
+
     return Container(
+      /// three level stack with:
+      /// 
+      /// 1. Video display.
+      /// 2. General controls.
+      /// 3. Play/Pause button.
       child: Stack(
         children: <Widget>[
+          // Video display.
           GestureDetector(
             onTap: () {
               onTapScreen();
@@ -69,6 +97,8 @@ class _LayoutState extends State<Layout> {
               ),
             ),
           ),
+
+          // General Controls.
           Visibility(
             visible: _showControls,
             child: Column(
@@ -116,7 +146,7 @@ class _LayoutState extends State<Layout> {
                             if (widget.isFullScreen) {
                               Navigator.pop(context, _videoPositionInMiliseconds);
                             } else {
-                              widget.onFullScreen(_videoPositionInMiliseconds);
+                              widget.onFullScreen();
                             }
                           },
                         ),
@@ -163,6 +193,8 @@ class _LayoutState extends State<Layout> {
               ],
             ),
           ),
+
+          // Play/pause buttons
           Visibility(
             visible: _showControls,
             child: Center(
@@ -185,7 +217,11 @@ class _LayoutState extends State<Layout> {
     );
   }
 
-  startStreaming() {
+
+  /// Starts listening a stream to [controller.progress] using the VideoControllerService.
+  /// With this value updates the state of the [milliseconds] variable to show the progress 
+  /// in the bottom slider.
+  void startStreaming() {
     this._videoControllerService.streamToProgress.listen((event) {
       if (_videoControllerService.value.duration.inMilliseconds.toDouble() > event.inMilliseconds.toDouble()) {
         setState(() {
@@ -195,7 +231,9 @@ class _LayoutState extends State<Layout> {
     });
   }
 
-  onTapScreen() {
+  /// Shows the controls when the user taps the screen and hides it after 3 seconds
+  /// using a timer that it will refresh in every touch
+  void onTapScreen() {
     if (_timer != null) {
       this._timer.cancel();
     }
@@ -217,7 +255,10 @@ class _LayoutState extends State<Layout> {
     }
   }
 
-  _onVolumePressed() {
+  /// Calls [onTapScreen()] to show the controls for 3 seconds more
+  /// and in case of volume > 0 mute the video, 
+  /// otherwise sets the last volume before it was muted
+  void _onVolumePressed() {
     onTapScreen();
     if (_videoControllerService.value.volume != 0) {
       _videoControllerService.setVolume(0.0);
@@ -226,7 +267,9 @@ class _LayoutState extends State<Layout> {
     }
   }
 
-  _onPlayButtonPressed() {
+  /// Calls [onTapScreen()] to show the controls for 3 seconds more
+  /// and plays the video if it's paused or pauses the video if it's playing.
+  void _onPlayButtonPressed() {
     onTapScreen();
     if (_videoControllerService.value.isPlaying) {
       _videoControllerService.pauseVideo();
@@ -236,7 +279,9 @@ class _LayoutState extends State<Layout> {
     setState(() {});
   }
 
-  _onVideoPositionChanged(value) {
+  /// Calls [onTapScreen()] to show the controls for 3 seconds more
+  /// and handles the slider dragging for move the current position of the video.
+  void _onVideoPositionChanged(value) {
     onTapScreen();
     var duration = Duration(milliseconds: value.floor());
     _videoControllerService.seekTo(duration);
@@ -246,7 +291,9 @@ class _LayoutState extends State<Layout> {
     setState(() {});
   }
 
-  _printDuration(Duration duration) {
+  /// Recieves a [duration] and returns the value printed in 
+  /// __mm:ss__ format.
+  String _printDuration(Duration duration) {
     if (duration != null) {
       String twoDigits(int n) {
         if (n >= 10) return "$n";
@@ -261,7 +308,9 @@ class _LayoutState extends State<Layout> {
     }
   }
 
-  _onVolumeChanged(val) {
+  /// Calls [onTapScreen()] to show the controls for 3 seconds more
+  /// and handles the slider dragging for move the current video volume.
+  void _onVolumeChanged(val) {
     _lastVolume = val;
     _videoControllerService.setVolume(val);
     onTapScreen();
@@ -269,7 +318,7 @@ class _LayoutState extends State<Layout> {
 
   @override
   void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
+    // Disposes the timer.
     this._timer?.cancel();
     super.dispose();
   }
