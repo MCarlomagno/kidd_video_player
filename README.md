@@ -1,5 +1,3 @@
-![Alt text](https://raw.githubusercontent.com/MCarlomagno/flutter_core_architecture/master/IMG_20200618_000609.png "Title")
-
 # kidd_video_player
 
 A new Flutter package project.
