@@ -26,10 +26,10 @@ class VideoControllerService {
     this._controller = controller;
   }
 
-  Future<void> initializeController() async {
+  Future<void> initializeController({bool inLoop}) async {
     await this._controller.initialize();
     // Use the controller to loop the video.
-    await _controller.setLooping(false);
+    await _controller.setLooping(inLoop);
   }
 
   Future<void> playVideo() {
