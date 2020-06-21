@@ -1,15 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:kidd_video_player/models/layout_configs.dart';
 import 'package:kidd_video_player/video_controller_service/video_controller_service.dart';
 import 'package:video_player/video_player.dart';
-
-///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-///
-///
-///                      WIDGET SCREEN!
-///
-///
-///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class Layout extends StatefulWidget {
   final Function(int) onFullScreen;
@@ -18,35 +11,14 @@ class Layout extends StatefulWidget {
 
   final int videoPositionInMiliseconds;
 
-  final bool showVolumeControl;
-
-  final bool showVideoControl;
-
-  final bool showFullScreenButton;
-
-  final Color iconsColor;
-
-  final Color sliderColor;
-
-  final Color backgroundSliderColor;
-
-  final IconData pauseIcon;
-
-  final IconData playIcon;
+  final LayoutConfigs layoutConfigs;
 
   const Layout({
     Key key,
     @required this.isFullScreen,
     this.onFullScreen,
     this.videoPositionInMiliseconds = 0,
-    this.showVolumeControl = true,
-    this.showVideoControl = true,
-    this.showFullScreenButton = true,
-    this.iconsColor = Colors.white,
-    this.sliderColor = Colors.white,
-    this.backgroundSliderColor = Colors.grey,
-    this.pauseIcon = Icons.pause,
-    this.playIcon = Icons.play_arrow,
+    this.layoutConfigs = LayoutConfigs.byDefault,
   }) : super(key: key);
 
   @override
@@ -56,15 +28,11 @@ class Layout extends StatefulWidget {
 class _LayoutState extends State<Layout> {
   VideoControllerService _videoControllerService = VideoControllerService();
 
-  Future<void> _initializeVideoPlayerFuture;
-  Future<void> get initializeVideoPlayerFuture => this._initializeVideoPlayerFuture;
-
   // video progress
   int _videoPositionInMiliseconds;
 
   // shows play/pause button and video progress
   bool _showControls = true;
-  bool get showControls => this._showControls;
 
   // timer for hide controls
   Timer _timer;
@@ -75,9 +43,7 @@ class _LayoutState extends State<Layout> {
   @override
   void initState() {
     super.initState();
-    // Initialize the controller and store the Future for later use.
     _videoPositionInMiliseconds = widget.videoPositionInMiliseconds;
-    //_onVideoPositionChanged(widget.videoPositionInMiliseconds);
   }
 
   @override
@@ -113,12 +79,12 @@ class _LayoutState extends State<Layout> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Visibility(
-                        visible: widget.showVolumeControl,
+                        visible: widget.layoutConfigs.showVolumeControl,
                         child: IconButton(
                           icon: Icon(
                             _videoControllerService.value.volume == 0.0 ? Icons.volume_off : Icons.volume_up,
                             size: 20,
-                            color: widget.iconsColor,
+                            color: widget.layoutConfigs.iconsColor,
                           ),
                           onPressed: () {
                             _onVolumePressed();
@@ -126,10 +92,10 @@ class _LayoutState extends State<Layout> {
                         ),
                       ),
                       Visibility(
-                        visible: widget.showVolumeControl,
+                        visible: widget.layoutConfigs.showVolumeControl,
                         child: Slider(
-                          inactiveColor: widget.backgroundSliderColor,
-                          activeColor: widget.sliderColor,
+                          inactiveColor: widget.layoutConfigs.backgroundSliderColor,
+                          activeColor: widget.layoutConfigs.sliderColor,
                           onChanged: (val) {
                             _onVolumeChanged(val);
                           },
@@ -140,11 +106,11 @@ class _LayoutState extends State<Layout> {
                       ),
                       Spacer(),
                       Visibility(
-                        visible: widget.showFullScreenButton,
+                        visible: widget.layoutConfigs.showFullScreenButton,
                         child: IconButton(
                           icon: Icon(
                             widget.isFullScreen ? Icons.close : Icons.crop_free,
-                            color: widget.iconsColor,
+                            color: widget.layoutConfigs.iconsColor,
                           ),
                           onPressed: () {
                             if (widget.isFullScreen) {
@@ -161,7 +127,7 @@ class _LayoutState extends State<Layout> {
                 Spacer(),
                 _videoControllerService.controller != null
                     ? Visibility(
-                        visible: widget.showVideoControl,
+                        visible: widget.layoutConfigs.showVideoControl,
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25),
                           child: Row(
@@ -169,20 +135,20 @@ class _LayoutState extends State<Layout> {
                             children: <Widget>[
                               Text(
                                 _printDuration(Duration(milliseconds: _videoPositionInMiliseconds)),
-                                style: TextStyle(color: widget.iconsColor),
+                                style: TextStyle(color: widget.layoutConfigs.iconsColor),
                               ),
                               Text(_printDuration(_videoControllerService.value.duration),
-                                  style: TextStyle(color: widget.iconsColor)),
+                                  style: TextStyle(color: widget.layoutConfigs.iconsColor)),
                             ],
                           ),
                         ),
                       )
                     : Container(),
                 Visibility(
-                  visible: widget.showVideoControl,
+                  visible: widget.layoutConfigs.showVideoControl,
                   child: Slider(
-                    inactiveColor: widget.backgroundSliderColor,
-                    activeColor: widget.sliderColor,
+                    inactiveColor: widget.layoutConfigs.backgroundSliderColor,
+                    activeColor: widget.layoutConfigs.sliderColor,
                     value: _videoPositionInMiliseconds.toDouble(),
                     onChanged: (value) {
                       _onVideoPositionChanged(value);
@@ -198,20 +164,19 @@ class _LayoutState extends State<Layout> {
             ),
           ),
           Visibility(
-            visible: showControls,
+            visible: _showControls,
             child: Center(
               child: IconButton(
                 iconSize: 80,
                 onPressed: () {
-                  // Wrap the play or pause in a call to `setState`. This ensures the
-                  // correct icon is shown.
                   _onPlayButtonPressed();
                 },
-                // Display the correct icon depending on the state of the player.
                 icon: Icon(
-                  _videoControllerService.value.isPlaying ? widget.pauseIcon : widget.playIcon,
-                  color: widget.iconsColor,
-                ), // This trailing comma makes auto-formatting nicer for build methods.
+                  _videoControllerService.value.isPlaying
+                      ? widget.layoutConfigs.pauseIcon
+                      : widget.layoutConfigs.playIcon,
+                  color: widget.layoutConfigs.iconsColor,
+                ),
               ),
             ),
           ),
@@ -253,6 +218,7 @@ class _LayoutState extends State<Layout> {
   }
 
   _onVolumePressed() {
+    onTapScreen();
     if (_videoControllerService.value.volume != 0) {
       _videoControllerService.setVolume(0.0);
     } else {
@@ -262,11 +228,9 @@ class _LayoutState extends State<Layout> {
 
   _onPlayButtonPressed() {
     onTapScreen();
-    // If the video is playing, pause it.
     if (_videoControllerService.value.isPlaying) {
       _videoControllerService.pauseVideo();
     } else {
-      // If the video is paused, play it.
       _videoControllerService.playVideo();
     }
     setState(() {});
