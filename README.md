@@ -145,6 +145,7 @@ This entry allows your app to access video files by URL.
 <p align="center">
 	<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screen_gif1.gif">
 </p>
+
 ## Licence
 BSD 3-Clause License
 
