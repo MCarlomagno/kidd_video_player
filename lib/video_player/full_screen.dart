@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 /// 
 /// see also: 
 /// https://github.com/MCarlomagno/kidd_video_player
-class FullScreen extends StatefulWidget {
+class KiddFullScreen extends StatefulWidget {
 
   /// Customizable color for the empty space around the video
   final Color backgroundColor;
@@ -19,13 +19,13 @@ class FullScreen extends StatefulWidget {
   /// Widget that contains all the video UI content (included [Layout])
   final Widget child;
 
-  const FullScreen({Key key, @required this.child, this.backgroundColor = Colors.black}) : assert(child != null), super(key: key);
+  const KiddFullScreen({Key key, @required this.child, this.backgroundColor = Colors.black}) : assert(child != null), super(key: key);
 
   @override
-  _FullScreenState createState() => _FullScreenState();
+  _KiddFullScreenState createState() => _KiddFullScreenState();
 }
 
-class _FullScreenState extends State<FullScreen> {
+class _KiddFullScreenState extends State<KiddFullScreen> {
 
   @override
   void dispose() {
