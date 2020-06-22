@@ -45,7 +45,9 @@ class _FullScreenState extends State<FullScreen> {
   }
 
   /// Sets the preferred device orientations to default
+  /// Sets the system UI overlays to default
   _setFullDeviceOrientations() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

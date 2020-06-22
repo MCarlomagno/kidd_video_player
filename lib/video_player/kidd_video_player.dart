@@ -124,6 +124,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
 
   /// Sets the preferred device orientations to landscape only
   _setLandscapeOrientation() {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -132,6 +133,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
 
   /// Sets the preferred device orientations to default
   _setFullOrientation() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
