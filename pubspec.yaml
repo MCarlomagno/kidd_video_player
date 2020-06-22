@@ -1,8 +1,7 @@
 name: kidd_video_player
 description: A new Flutter package project.
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/MCarlomagno/kidd_video_player 
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  video_player:
+  video_player: ^0.10.11+1
 
 dev_dependencies:
   flutter_test:
