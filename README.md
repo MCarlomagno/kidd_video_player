@@ -1,4 +1,6 @@
-<img height="300" src="https://github.com/MCarlomagno/flutter_core_architecture/blob/master/Kidd_kode.png">
+<p align="center">
+	<img height="300" src="https://github.com/MCarlomagno/flutter_core_architecture/blob/master/Kidd_kode.png">
+</p>
 
 # kidd_video_player package
 
@@ -134,10 +136,15 @@ This entry allows your app to access video files by URL.
 	 -  **sliderColor**(Color)
 
 ## Screenshots
-<img height="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot1.jpg">
-<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot2.jpg">
-<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screen_gif1.gif">
-
+<p align="center">
+	<img height="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot1.jpg">
+</p>
+<p align="center">
+	<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot2.jpg">
+</p>
+<p align="center">
+	<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screen_gif1.gif">
+</p>
 ## Licence
 BSD 3-Clause License
 
