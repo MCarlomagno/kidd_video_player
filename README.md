@@ -3,13 +3,13 @@
 # kidd_video_player package
 
 ## Summary
-This project is a starting point for a Dart [package](https://flutter.dev/developing-packages/). The main goal is to add a video player to a flutter application in the simplest and most customizable way possible.
-Taking as input a source file or url the player loads the video and plays it.
+ The main goal if this project is to add a video player to a flutter application in the simplest and most customizable way as possible.
+Taking as input a source file or url, the player loads the video and plays it.
 
 ## Installation
 
 ### Dependencies:
-To make it work you need to add [video_player](https://pub.dev/packages/video_player) package to your dependencies:
+In order to make it work you need to add [video_player](https://pub.dev/packages/video_player) package to your dependencies:
 
 
 ### Step 1
@@ -23,21 +23,21 @@ In pubspec.yml add:
 	   kidd_video_player: 
     
 ### Step 2
-Then open your terminal and run:
+Open your terminal and run:
 
     flutter pub get
 
 
 ### Step 3
 
-Import the widget in the dart file that contains the widget that will contain the video player:
+Import the script in the dart file that will contain the widget that uses the video player as a child:
 
     import  'package:kidd_video_player/kidd_video_player.dart';
 
 
 ### Step 4
 
-Let's code a simple example, put the KiddVideoPlayer() class as a child of some widget:
+Let's code a simple example, put the KiddVideoPlayer() class as a child of some widget with the following parameters:
 
     ...
     child: Container(
@@ -54,7 +54,7 @@ Let's code a simple example, put the KiddVideoPlayer() class as a child of some 
 
 ## Considerations
 ### For Android:
-Ensure to have in the *Mainfest.xml* application tag located in `<project root>/android/app/src/main/Mainfest.xml`:
+Be sure to have the following line in the `<application ...>` tag located in `<project root>/android/app/src/main/Mainfest.xml`:
 ```
 <application 
     ...
@@ -62,9 +62,12 @@ Ensure to have in the *Mainfest.xml* application tag located in `<project root>/
     ...
  ```   
  
-And the avobe line in your Mainfest.xml
+And the below line outside the `<application ...>` tag:
 ```
 <uses-permission android:name="android.permission.INTERNET"/>
+...
+<application 
+...
 ```   
 This entry allows your app to access video files by URL.
 
