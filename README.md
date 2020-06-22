@@ -134,9 +134,9 @@ This entry allows your app to access video files by URL.
 	 -  **sliderColor**(Color)
 
 ## Screenshots
-<img src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot1.jpg">
-<img src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot2.jpg">
-<img src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screen_gif1.gif">
+<img height="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot1.jpg">
+<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot2.jpg">
+<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screen_gif1.gif">
 
 ## Licence
 
