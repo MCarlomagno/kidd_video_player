@@ -1,3 +1,5 @@
+<img height="300" src="https://github.com/MCarlomagno/flutter_core_architecture/blob/master/Kidd_kode.png">
+
 # kidd_video_player package
 
 ## Summary
