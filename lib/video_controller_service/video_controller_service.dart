@@ -9,14 +9,14 @@ import 'package:video_player/video_player.dart';
 /// see also: 
 /// https://github.com/MCarlomagno/kidd_video_player
 
-class VideoControllerService {
+class KiddVideoControllerService {
 
   /// Singleton initialization.
-  static final VideoControllerService _videoControllerService = VideoControllerService._internal();
-  VideoControllerService._internal();
+  static final KiddVideoControllerService _videoControllerService = KiddVideoControllerService._internal();
+  KiddVideoControllerService._internal();
 
   /// Factory pattern for constrictor.
-  factory VideoControllerService() {
+  factory KiddVideoControllerService() {
     return _videoControllerService;
   }
 

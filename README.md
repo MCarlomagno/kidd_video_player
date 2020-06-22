@@ -99,7 +99,7 @@ This entry allows your app to access video files by URL.
 	    child: KiddVideoPlayer(
 		    videoFile: _videoFile,
 		    fromUrl: false,
-		    layoutConfigs: LayoutConfigs(
+		    layoutConfigs: KiddLayoutConfigs(
 			    backgroundColor: Colors.black,
 			    backgroundSliderColor: Colors.grey,
 			    iconsColor: Colors.white,

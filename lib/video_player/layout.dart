@@ -15,7 +15,7 @@ import 'package:video_player/video_player.dart';
 /// see also: 
 /// https://github.com/MCarlomagno/kidd_video_player
 
-class Layout extends StatefulWidget {
+class KiddLayout extends StatefulWidget {
 
   /// Callback to ancestor widget function to display this content on full screen.
   final Function onFullScreen;
@@ -27,24 +27,24 @@ class Layout extends StatefulWidget {
   final int videoPositionInMilliseconds;
 
   /// Class that contains the UI customizations
-  final LayoutConfigs layoutConfigs;
+  final KiddLayoutConfigs layoutConfigs;
 
-  const Layout({
+  const KiddLayout({
     Key key,
     @required this.isFullScreen,
     this.onFullScreen,
     this.videoPositionInMilliseconds = 0,
-    this.layoutConfigs = LayoutConfigs.byDefault,
+    this.layoutConfigs = KiddLayoutConfigs.byDefault,
   }) : assert(isFullScreen != null), super(key: key);
 
   @override
-  _LayoutState createState() => _LayoutState();
+  _KiddLayoutState createState() => _KiddLayoutState();
 }
 
-class _LayoutState extends State<Layout> {
+class _KiddLayoutState extends State<KiddLayout> {
 
   /// The service that manages the video player controller.
-  VideoControllerService _videoControllerService = VideoControllerService();
+  KiddVideoControllerService _videoControllerService = KiddVideoControllerService();
 
   /// Progress in milliseconds of the current video.
   int _videoPositionInMiliseconds;

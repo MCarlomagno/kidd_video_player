@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 /// https://github.com/MCarlomagno/kidd_video_player
 
 @immutable
-class LayoutConfigs {
+class KiddLayoutConfigs {
 
   /// Shows (or not) the slider  for volume control 
   /// and icon button for set the volume on mute.
@@ -58,7 +58,7 @@ class LayoutConfigs {
   /// (by default [playIcon = Icons.play_arrow])
   final IconData playIcon;
 
-  const LayoutConfigs({
+  const KiddLayoutConfigs({
     this.showVolumeControl = true,
     this.showVideoControl = true,
     this.showFullScreenButton = true,
@@ -73,6 +73,6 @@ class LayoutConfigs {
   });
 
   /// By defaul object (used when the values are not customized).
-  static const byDefault = LayoutConfigs();
+  static const byDefault = KiddLayoutConfigs();
  
 }

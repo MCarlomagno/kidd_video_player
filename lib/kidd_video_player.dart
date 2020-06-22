@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kidd_video_player/models/layout_configs.dart';
 import 'package:kidd_video_player/video_controller_service/video_controller_service.dart';
+import 'package:kidd_video_player/video_player/full_screen.dart';
+import 'package:kidd_video_player/video_player/layout.dart';
 import 'package:video_player/video_player.dart';
-import 'full_screen.dart';
-import 'layout.dart';
 
 /// #### Main class in the package.
 /// 
@@ -30,7 +30,7 @@ class KiddVideoPlayer extends StatefulWidget {
   final bool fromUrl;
 
   /// The class Layout config has the variables to customize the UI.
-  final LayoutConfigs layoutConfigs;
+  final KiddLayoutConfigs layoutConfigs;
 
   const KiddVideoPlayer({
     Key key,
@@ -38,7 +38,7 @@ class KiddVideoPlayer extends StatefulWidget {
     @required this.fromUrl,
     this.videoFile,
     this.videoUrl,
-    this.layoutConfigs = LayoutConfigs.byDefault,
+    this.layoutConfigs = KiddLayoutConfigs.byDefault,
   }) : assert(fromUrl != null), assert(fromUrl && videoUrl != null || !fromUrl && videoFile != null), super(key: key);
 
   @override
@@ -51,7 +51,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   bool isFullScreen = false;
 
   /// The service that manages the video player controller.
-  VideoControllerService _videoControllerService = VideoControllerService();
+  KiddVideoControllerService _videoControllerService = KiddVideoControllerService();
 
   /// True if the video player is not able to display video.
   bool isBusy = true;
@@ -73,7 +73,7 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
       body: Container(
         color: widget.layoutConfigs.backgroundColor,
         child: !isBusy
-            ? Layout(isFullScreen: isFullScreen, onFullScreen: onFullScreen, layoutConfigs: widget.layoutConfigs)
+            ? KiddLayout(isFullScreen: isFullScreen, onFullScreen: onFullScreen, layoutConfigs: widget.layoutConfigs)
             : Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(widget.layoutConfigs.loaderColor),
@@ -85,9 +85,9 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
 
   /// Builds the full screen widget, recieves the context and returns the widget.
   Widget _buildFullScreen(BuildContext context) {
-    return FullScreen(
+    return KiddFullScreen(
       backgroundColor: widget.layoutConfigs.backgroundColor,
-      child: Layout(isFullScreen: isFullScreen, onFullScreen: onFullScreen, layoutConfigs: widget.layoutConfigs),
+      child: KiddLayout(isFullScreen: isFullScreen, onFullScreen: onFullScreen, layoutConfigs: widget.layoutConfigs),
     );
   }
 
