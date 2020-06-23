@@ -5,17 +5,17 @@
 # kidd_video_player package
 
 ## Summary
- The main goal if this project is to add a video player to a flutter application in the simplest and most customizable way as possible.
+ The main goal in this project is to add a video player to a flutter application in the simplest and most customizable possible way as possible.
 Taking as input a source file or url, the player loads the video and plays it.
 
 ## Installation
 
 ### Dependencies:
-In order to make it work you need to add [video_player](https://pub.dev/packages/video_player) package to your dependencies:
+In order to make it work, you need to add [video_player](https://pub.dev/packages/video_player) package to your dependencies:
 
 
 ### Step 1
-In pubspec.yml add:
+In your pubspec.yml, add:
 
     dependencies:
 	   flutter:
@@ -32,14 +32,14 @@ Open your terminal and run:
 
 ### Step 3
 
-Import the script in the dart file that will contain the widget that uses the video player as a child:
+Import the script into the dart file that will contain the widget that uses the video player as a child:
 
     import  'package:kidd_video_player/kidd_video_player.dart';
 
 
 ### Step 4
 
-Let's code a simple example, put the KiddVideoPlayer() class as a child of some widget with the following parameters:
+Let's code a simple example. Put the KiddVideoPlayer() class as a child of some widget with the following parameters:
 
     ...
     child: Container(
@@ -56,7 +56,7 @@ Let's code a simple example, put the KiddVideoPlayer() class as a child of some 
 
 ## Considerations
 ### For Android:
-Be sure to have the following line in the `<application ...>` tag located in `<project root>/android/app/src/main/Mainfest.xml`:
+Be sure that the following line appears in the `<application ...>` tag located in `<project root>/android/app/src/main/Mainfest.xml`:
 ```
 <application 
     ...
@@ -64,7 +64,7 @@ Be sure to have the following line in the `<application ...>` tag located in `<p
     ...
  ```   
  
-And the below line outside the `<application ...>` tag:
+And the line below outside the `<application ...>` tag:
 ```
 <uses-permission android:name="android.permission.INTERNET"/>
 ...
