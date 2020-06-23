@@ -5,18 +5,17 @@ import 'package:kidd_video_player/video_controller_service/video_controller_serv
 import 'package:video_player/video_player.dart';
 
 /// #### Class that contains the most of the UI content.
-/// 
+///
 /// Class for internal functionality proposes.
-/// 
-/// It recieves 4 parameters 
+///
+/// It recieves 4 parameters
 /// [onFullScreen] [isFullScreen] [videoPositionInMilliseconds] [layoutConfigs].
 /// Only assertion [isFullScreen] != null.
-/// 
-/// see also: 
+///
+/// see also:
 /// https://github.com/MCarlomagno/kidd_video_player
 
 class KiddLayout extends StatefulWidget {
-
   /// Callback to ancestor widget function to display this content on full screen.
   final Function onFullScreen;
 
@@ -35,16 +34,17 @@ class KiddLayout extends StatefulWidget {
     this.onFullScreen,
     this.videoPositionInMilliseconds = 0,
     this.layoutConfigs = KiddLayoutConfigs.byDefault,
-  }) : assert(isFullScreen != null), super(key: key);
+  })  : assert(isFullScreen != null),
+        super(key: key);
 
   @override
   _KiddLayoutState createState() => _KiddLayoutState();
 }
 
 class _KiddLayoutState extends State<KiddLayout> {
-
   /// The service that manages the video player controller.
-  KiddVideoControllerService _videoControllerService = KiddVideoControllerService();
+  KiddVideoControllerService _videoControllerService =
+      KiddVideoControllerService();
 
   /// Progress in milliseconds of the current video.
   int _videoPositionInMiliseconds;
@@ -73,7 +73,7 @@ class _KiddLayoutState extends State<KiddLayout> {
 
     return Container(
       /// three level stack with:
-      /// 
+      ///
       /// 1. Video display.
       /// 2. General controls.
       /// 3. Play/Pause button.
@@ -112,7 +112,9 @@ class _KiddLayoutState extends State<KiddLayout> {
                         visible: widget.layoutConfigs.showVolumeControl,
                         child: IconButton(
                           icon: Icon(
-                            _videoControllerService.value.volume == 0.0 ? Icons.volume_off : Icons.volume_up,
+                            _videoControllerService.value.volume == 0.0
+                                ? Icons.volume_off
+                                : Icons.volume_up,
                             size: 20,
                             color: widget.layoutConfigs.iconsColor,
                           ),
@@ -124,7 +126,8 @@ class _KiddLayoutState extends State<KiddLayout> {
                       Visibility(
                         visible: widget.layoutConfigs.showVolumeControl,
                         child: Slider(
-                          inactiveColor: widget.layoutConfigs.backgroundSliderColor,
+                          inactiveColor:
+                              widget.layoutConfigs.backgroundSliderColor,
                           activeColor: widget.layoutConfigs.sliderColor,
                           onChanged: (val) {
                             _onVolumeChanged(val);
@@ -144,7 +147,8 @@ class _KiddLayoutState extends State<KiddLayout> {
                           ),
                           onPressed: () {
                             if (widget.isFullScreen) {
-                              Navigator.pop(context, _videoPositionInMiliseconds);
+                              Navigator.pop(
+                                  context, _videoPositionInMiliseconds);
                             } else {
                               widget.onFullScreen();
                             }
@@ -164,11 +168,16 @@ class _KiddLayoutState extends State<KiddLayout> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                _printDuration(Duration(milliseconds: _videoPositionInMiliseconds)),
-                                style: TextStyle(color: widget.layoutConfigs.iconsColor),
+                                _printDuration(Duration(
+                                    milliseconds: _videoPositionInMiliseconds)),
+                                style: TextStyle(
+                                    color: widget.layoutConfigs.iconsColor),
                               ),
-                              Text(_printDuration(_videoControllerService.value.duration),
-                                  style: TextStyle(color: widget.layoutConfigs.iconsColor)),
+                              Text(
+                                  _printDuration(
+                                      _videoControllerService.value.duration),
+                                  style: TextStyle(
+                                      color: widget.layoutConfigs.iconsColor)),
                             ],
                           ),
                         ),
@@ -185,7 +194,8 @@ class _KiddLayoutState extends State<KiddLayout> {
                     },
                     min: 0.0,
                     max: _videoControllerService.value.duration != null
-                        ? _videoControllerService.value.duration.inMilliseconds.toDouble()
+                        ? _videoControllerService.value.duration.inMilliseconds
+                            .toDouble()
                         : _videoPositionInMiliseconds.toDouble(),
                     label: 'Video',
                   ),
@@ -217,13 +227,13 @@ class _KiddLayoutState extends State<KiddLayout> {
     );
   }
 
-
   /// Starts listening a stream to [controller.progress] using the VideoControllerService.
-  /// With this value updates the state of the [milliseconds] variable to show the progress 
+  /// With this value updates the state of the [milliseconds] variable to show the progress
   /// in the bottom slider.
   void startStreaming() {
     this._videoControllerService.streamToProgress.listen((event) {
-      if (_videoControllerService.value.duration.inMilliseconds.toDouble() > event.inMilliseconds.toDouble()) {
+      if (_videoControllerService.value.duration.inMilliseconds.toDouble() >
+          event.inMilliseconds.toDouble()) {
         setState(() {
           _videoPositionInMiliseconds = event.inMilliseconds;
         });
@@ -256,7 +266,7 @@ class _KiddLayoutState extends State<KiddLayout> {
   }
 
   /// Calls [onTapScreen()] to show the controls for 3 seconds more
-  /// and in case of volume > 0 mute the video, 
+  /// and in case of volume > 0 mute the video,
   /// otherwise sets the last volume before it was muted
   void _onVolumePressed() {
     onTapScreen();
@@ -285,13 +295,14 @@ class _KiddLayoutState extends State<KiddLayout> {
     onTapScreen();
     var duration = Duration(milliseconds: value.floor());
     _videoControllerService.seekTo(duration);
-    if (_videoControllerService.value.duration.inMilliseconds.toDouble() > value.floor().toDouble()) {
+    if (_videoControllerService.value.duration.inMilliseconds.toDouble() >
+        value.floor().toDouble()) {
       _videoPositionInMiliseconds = value.floor();
     }
     setState(() {});
   }
 
-  /// Recieves a [duration] and returns the value printed in 
+  /// Recieves a [duration] and returns the value printed in
   /// __mm:ss__ format.
   String _printDuration(Duration duration) {
     if (duration != null) {

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
 /// #### Inmutable class for UI customizations
-/// 
-/// It recieves 11 parameters 
+///
+/// It recieves 11 parameters
 /// All of them can be null and have values by default
-/// 
-/// see also: 
+///
+/// see also:
 /// https://github.com/MCarlomagno/kidd_video_player
 
 @immutable
 class KiddLayoutConfigs {
-
-  /// Shows (or not) the slider  for volume control 
+  /// Shows (or not) the slider  for volume control
   /// and icon button for set the volume on mute.
   /// (by default [showVolumeControl = true])
   final bool showVolumeControl;
@@ -25,7 +24,7 @@ class KiddLayoutConfigs {
   /// (by default [showFullScreenButton = true])
   final bool showFullScreenButton;
 
-  /// Sets (or not) the video looping 
+  /// Sets (or not) the video looping
   /// (by default [inLoop = true])
   final bool inLoop;
 
@@ -45,7 +44,6 @@ class KiddLayoutConfigs {
   /// (by default [backgroundColor = Colors.black])
   final Color backgroundColor;
 
-  
   /// Sets the color of the [CircularProgressIndicator] when the video is loading
   /// (by default [loaderColor = Colors.white])
   final Color loaderColor;
@@ -58,21 +56,19 @@ class KiddLayoutConfigs {
   /// (by default [playIcon = Icons.play_arrow])
   final IconData playIcon;
 
-  const KiddLayoutConfigs({
-    this.showVolumeControl = true,
-    this.showVideoControl = true,
-    this.showFullScreenButton = true,
-    this.inLoop = false,
-    this.iconsColor = Colors.white,
-    this.sliderColor = Colors.white,
-    this.backgroundSliderColor = Colors.grey,
-    this.backgroundColor = Colors.black,
-    this.loaderColor = Colors.white,
-    this.pauseIcon = Icons.pause,
-    this.playIcon = Icons.play_arrow
-  });
+  const KiddLayoutConfigs(
+      {this.showVolumeControl = true,
+      this.showVideoControl = true,
+      this.showFullScreenButton = true,
+      this.inLoop = false,
+      this.iconsColor = Colors.white,
+      this.sliderColor = Colors.white,
+      this.backgroundSliderColor = Colors.grey,
+      this.backgroundColor = Colors.black,
+      this.loaderColor = Colors.white,
+      this.pauseIcon = Icons.pause,
+      this.playIcon = Icons.play_arrow});
 
   /// By defaul object (used when the values are not customized).
   static const byDefault = KiddLayoutConfigs();
- 
 }

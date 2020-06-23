@@ -8,18 +8,17 @@ import 'package:kidd_video_player/video_player/layout.dart';
 import 'package:video_player/video_player.dart';
 
 /// #### Main class in the package.
-/// 
+///
 /// Use this class to show the video player as a child of some sized widget.
-/// 
-/// It recieves 4 parameters 
+///
+/// It recieves 4 parameters
 /// [videoFile] [videoUrl] [fromUrl] [layoutConfigs],
 /// is important to use one and only one of the options __url__ or __file__, not both, not none of them.
-/// 
-/// see also: 
+///
+/// see also:
 /// https://github.com/MCarlomagno/kidd_video_player
 
 class KiddVideoPlayer extends StatefulWidget {
-
   /// The video source file.
   final File videoFile;
 
@@ -34,24 +33,25 @@ class KiddVideoPlayer extends StatefulWidget {
 
   const KiddVideoPlayer({
     Key key,
-    
     @required this.fromUrl,
     this.videoFile,
     this.videoUrl,
     this.layoutConfigs = KiddLayoutConfigs.byDefault,
-  }) : assert(fromUrl != null), assert(fromUrl && videoUrl != null || !fromUrl && videoFile != null), super(key: key);
+  })  : assert(fromUrl != null),
+        assert(fromUrl && videoUrl != null || !fromUrl && videoFile != null),
+        super(key: key);
 
   @override
   _KiddVideoPlayerState createState() => _KiddVideoPlayerState();
 }
 
 class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
-
   /// Manages the state of the screen (full or not full screen).
   bool isFullScreen = false;
 
   /// The service that manages the video player controller.
-  KiddVideoControllerService _videoControllerService = KiddVideoControllerService();
+  KiddVideoControllerService _videoControllerService =
+      KiddVideoControllerService();
 
   /// True if the video player is not able to display video.
   bool isBusy = true;
@@ -73,10 +73,14 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
       body: Container(
         color: widget.layoutConfigs.backgroundColor,
         child: !isBusy
-            ? KiddLayout(isFullScreen: isFullScreen, onFullScreen: onFullScreen, layoutConfigs: widget.layoutConfigs)
+            ? KiddLayout(
+                isFullScreen: isFullScreen,
+                onFullScreen: onFullScreen,
+                layoutConfigs: widget.layoutConfigs)
             : Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(widget.layoutConfigs.loaderColor),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      widget.layoutConfigs.loaderColor),
                 ),
               ),
       ),
@@ -87,13 +91,16 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   Widget _buildFullScreen(BuildContext context) {
     return KiddFullScreen(
       backgroundColor: widget.layoutConfigs.backgroundColor,
-      child: KiddLayout(isFullScreen: isFullScreen, onFullScreen: onFullScreen, layoutConfigs: widget.layoutConfigs),
+      child: KiddLayout(
+          isFullScreen: isFullScreen,
+          onFullScreen: onFullScreen,
+          layoutConfigs: widget.layoutConfigs),
     );
   }
 
   /// The method called when the fullScreen button is pressed.
   /// Sets the orientation to landscape
-  /// opens the full screen window and after the full screen widnow is 
+  /// opens the full screen window and after the full screen widnow is
   /// closed returns the normal screen orientation.
   void onFullScreen() async {
     _setLandscapeOrientation();
@@ -106,16 +113,20 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
   /// Creates the VideoController for the given source (file or url).
   void _setController() {
     if (widget.fromUrl) {
-      _videoControllerService.setController(VideoPlayerController.network(widget.videoUrl));
+      _videoControllerService
+          .setController(VideoPlayerController.network(widget.videoUrl));
     } else {
-      _videoControllerService.setController(VideoPlayerController.file(widget.videoFile));
+      _videoControllerService
+          .setController(VideoPlayerController.file(widget.videoFile));
     }
   }
 
-  /// Initializes the VideoController and after initialization 
+  /// Initializes the VideoController and after initialization
   /// sets [isBusy] on *false* to show the video player.
   void _initialize() {
-    _videoControllerService.initializeController(inLoop: widget.layoutConfigs.inLoop).then((value) {
+    _videoControllerService
+        .initializeController(inLoop: widget.layoutConfigs.inLoop)
+        .then((value) {
       setState(() {
         isBusy = false;
       });
@@ -124,7 +135,8 @@ class _KiddVideoPlayerState extends State<KiddVideoPlayer> {
 
   /// Sets the preferred device orientations to landscape only
   _setLandscapeOrientation() {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIOverlays(
+        [SystemUiOverlay.bottom, SystemUiOverlay.top]);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,

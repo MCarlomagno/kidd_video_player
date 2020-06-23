@@ -46,23 +46,23 @@ class KiddVideoControllerService {
   } 
 
   /// Plays the video.
-  Future<void> playVideo() {
-    _controller.play();
+  Future<void> playVideo() async {
+    await _controller.play();
   }
 
   /// Pauses the video.
-  Future<void> pauseVideo() {
-    _controller.pause();
+  Future<void> pauseVideo() async {
+    await _controller.pause();
   }
 
   /// Moves the video progress to the given Duration value
-  Future<void> seekTo(Duration value) {
-    this._controller.seekTo(value);
+  Future<void> seekTo(Duration value) async {
+    await this._controller.seekTo(value);
   }
 
   /// Sets the loop boolean variable for restart the video when it finishes.
-  void setLooping(bool value) {
-    _controller.setLooping(value);
+  Future<void> setLooping(bool value) async {
+    await _controller.setLooping(value);
   }
 
   /// Sets the volume value (between 0.0 and 1.0).
