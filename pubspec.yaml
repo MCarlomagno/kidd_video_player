@@ -1,6 +1,6 @@
 name: kidd_video_player
 description: Flutter package for creating a video player in the simplest and most customizable way as possible.
-version: 0.0.1
+version: 0.0.11
 repository: https://github.com/MCarlomagno/kidd_video_player 
 homepage: https://github.com/MCarlomagno/kidd_video_player 
 
