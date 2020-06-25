@@ -2,17 +2,17 @@ import 'dart:async';
 import 'package:video_player/video_player.dart';
 
 /// #### Singleton service for video player controller handling
-/// 
+///
 /// The propose of this service is to add a new level of abstraction to manage the
 /// video controller and make it more ease to access from different widgets.
-/// 
-/// see also: 
+///
+/// see also:
 /// https://github.com/MCarlomagno/kidd_video_player
 
 class KiddVideoControllerService {
-
   /// Singleton initialization.
-  static final KiddVideoControllerService _videoControllerService = KiddVideoControllerService._internal();
+  static final KiddVideoControllerService _videoControllerService =
+      KiddVideoControllerService._internal();
   KiddVideoControllerService._internal();
 
   /// Factory pattern for constrictor.
@@ -43,7 +43,7 @@ class KiddVideoControllerService {
     await this._controller.initialize();
     // Use the controller to loop the video.
     await _controller.setLooping(inLoop);
-  } 
+  }
 
   /// Plays the video.
   Future<void> playVideo() async {

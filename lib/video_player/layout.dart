@@ -43,7 +43,8 @@ class KiddLayout extends StatefulWidget {
 
 class _KiddLayoutState extends State<KiddLayout> {
   /// The service that manages the video player controller.
-  KiddVideoControllerService _videoControllerService = KiddVideoControllerService();
+  KiddVideoControllerService _videoControllerService =
+      KiddVideoControllerService();
 
   /// Progress in milliseconds of the current video.
   int _videoPositionInMiliseconds;
@@ -110,7 +111,9 @@ class _KiddLayoutState extends State<KiddLayout> {
                           visible: widget.layoutConfigs.showVolumeControl,
                           child: IconButton(
                             icon: Icon(
-                              _videoControllerService.value.volume == 0.0 ? Icons.volume_off : Icons.volume_up,
+                              _videoControllerService.value.volume == 0.0
+                                  ? Icons.volume_off
+                                  : Icons.volume_up,
                               size: 20,
                               color: widget.layoutConfigs.iconsColor,
                             ),
@@ -122,7 +125,8 @@ class _KiddLayoutState extends State<KiddLayout> {
                         Visibility(
                           visible: widget.layoutConfigs.showVolumeControl,
                           child: Slider(
-                            inactiveColor: widget.layoutConfigs.backgroundSliderColor,
+                            inactiveColor:
+                                widget.layoutConfigs.backgroundSliderColor,
                             activeColor: widget.layoutConfigs.sliderColor,
                             onChanged: (val) {
                               _onVolumeChanged(val);
@@ -137,12 +141,15 @@ class _KiddLayoutState extends State<KiddLayout> {
                           visible: widget.layoutConfigs.showFullScreenButton,
                           child: IconButton(
                             icon: Icon(
-                              widget.isFullScreen ? Icons.close : Icons.crop_free,
+                              widget.isFullScreen
+                                  ? Icons.close
+                                  : Icons.crop_free,
                               color: widget.layoutConfigs.iconsColor,
                             ),
                             onPressed: () {
                               if (widget.isFullScreen) {
-                                Navigator.pop(context, _videoPositionInMiliseconds);
+                                Navigator.pop(
+                                    context, _videoPositionInMiliseconds);
                               } else {
                                 widget.onFullScreen();
                               }
@@ -162,11 +169,18 @@ class _KiddLayoutState extends State<KiddLayout> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  _printDuration(Duration(milliseconds: _videoPositionInMiliseconds)),
-                                  style: TextStyle(color: widget.layoutConfigs.iconsColor),
+                                  _printDuration(Duration(
+                                      milliseconds:
+                                          _videoPositionInMiliseconds)),
+                                  style: TextStyle(
+                                      color: widget.layoutConfigs.iconsColor),
                                 ),
-                                Text(_printDuration(_videoControllerService.value.duration),
-                                    style: TextStyle(color: widget.layoutConfigs.iconsColor)),
+                                Text(
+                                    _printDuration(
+                                        _videoControllerService.value.duration),
+                                    style: TextStyle(
+                                        color:
+                                            widget.layoutConfigs.iconsColor)),
                               ],
                             ),
                           ),
@@ -183,7 +197,9 @@ class _KiddLayoutState extends State<KiddLayout> {
                       },
                       min: 0.0,
                       max: _videoControllerService.value.duration != null
-                          ? _videoControllerService.value.duration.inMilliseconds.toDouble()
+                          ? _videoControllerService
+                              .value.duration.inMilliseconds
+                              .toDouble()
                           : _videoPositionInMiliseconds.toDouble(),
                       label: 'Video',
                     ),
@@ -221,7 +237,8 @@ class _KiddLayoutState extends State<KiddLayout> {
   /// in the bottom slider.
   void startStreaming() {
     this._videoControllerService.streamToProgress.listen((event) {
-      if (_videoControllerService.value.duration.inMilliseconds.toDouble() > event.inMilliseconds.toDouble()) {
+      if (_videoControllerService.value.duration.inMilliseconds.toDouble() >
+          event.inMilliseconds.toDouble()) {
         setState(() {
           _videoPositionInMiliseconds = event.inMilliseconds;
         });
@@ -283,7 +300,8 @@ class _KiddLayoutState extends State<KiddLayout> {
     onTapScreen();
     var duration = Duration(milliseconds: value.floor());
     _videoControllerService.seekTo(duration);
-    if (_videoControllerService.value.duration.inMilliseconds.toDouble() > value.floor().toDouble()) {
+    if (_videoControllerService.value.duration.inMilliseconds.toDouble() >
+        value.floor().toDouble()) {
       _videoPositionInMiliseconds = value.floor();
     }
     setState(() {});

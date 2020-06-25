@@ -32,15 +32,16 @@ class MyApp extends StatelessWidget {
           title: Text('Some awesome app'),
         ),
         body: Center(
-        child: Container(
-          height: 400,
-          child: KiddVideoPlayer(
-            fromUrl: true,
-            videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          child: Container(
+            height: 400,
+            child: KiddVideoPlayer(
+              fromUrl: true,
+              videoUrl:
+                  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            ),
           ),
         ),
       ),
-      ) ,
     );
   }
 }
