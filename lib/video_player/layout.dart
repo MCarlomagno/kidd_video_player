@@ -43,8 +43,7 @@ class KiddLayout extends StatefulWidget {
 
 class _KiddLayoutState extends State<KiddLayout> {
   /// The service that manages the video player controller.
-  KiddVideoControllerService _videoControllerService =
-      KiddVideoControllerService();
+  KiddVideoControllerService _videoControllerService = KiddVideoControllerService();
 
   /// Progress in milliseconds of the current video.
   int _videoPositionInMiliseconds;
@@ -71,20 +70,20 @@ class _KiddLayoutState extends State<KiddLayout> {
     // starts the streaming for video progress
     startStreaming();
 
-    return Container(
-      /// three level stack with:
-      ///
-      /// 1. Video display.
-      /// 2. General controls.
-      /// 3. Play/Pause button.
-      child: Stack(
-        children: <Widget>[
-          // Video display.
-          GestureDetector(
-            onTap: () {
-              onTapScreen();
-            },
-            child: Container(
+    return GestureDetector(
+      onTap: () {
+        onTapScreen();
+      },
+      child: Container(
+        /// three level stack with:
+        ///
+        /// 1. Video display.
+        /// 2. General controls.
+        /// 3. Play/Pause button.
+        child: Stack(
+          children: <Widget>[
+            // Video display.
+            Container(
               child: Center(
                 child: AspectRatio(
                   aspectRatio: _videoControllerService.value.aspectRatio,
@@ -96,133 +95,123 @@ class _KiddLayoutState extends State<KiddLayout> {
                 ),
               ),
             ),
-          ),
 
-          // General Controls.
-          Visibility(
-            visible: _showControls,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Visibility(
-                        visible: widget.layoutConfigs.showVolumeControl,
-                        child: IconButton(
-                          icon: Icon(
-                            _videoControllerService.value.volume == 0.0
-                                ? Icons.volume_off
-                                : Icons.volume_up,
-                            size: 20,
-                            color: widget.layoutConfigs.iconsColor,
+            // General Controls.
+            Visibility(
+              visible: _showControls,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Visibility(
+                          visible: widget.layoutConfigs.showVolumeControl,
+                          child: IconButton(
+                            icon: Icon(
+                              _videoControllerService.value.volume == 0.0 ? Icons.volume_off : Icons.volume_up,
+                              size: 20,
+                              color: widget.layoutConfigs.iconsColor,
+                            ),
+                            onPressed: () {
+                              _onVolumePressed();
+                            },
                           ),
-                          onPressed: () {
-                            _onVolumePressed();
-                          },
                         ),
-                      ),
-                      Visibility(
-                        visible: widget.layoutConfigs.showVolumeControl,
-                        child: Slider(
-                          inactiveColor:
-                              widget.layoutConfigs.backgroundSliderColor,
-                          activeColor: widget.layoutConfigs.sliderColor,
-                          onChanged: (val) {
-                            _onVolumeChanged(val);
-                          },
-                          value: _videoControllerService.value.volume,
-                          min: 0.0,
-                          max: 1.0,
-                        ),
-                      ),
-                      Spacer(),
-                      Visibility(
-                        visible: widget.layoutConfigs.showFullScreenButton,
-                        child: IconButton(
-                          icon: Icon(
-                            widget.isFullScreen ? Icons.close : Icons.crop_free,
-                            color: widget.layoutConfigs.iconsColor,
+                        Visibility(
+                          visible: widget.layoutConfigs.showVolumeControl,
+                          child: Slider(
+                            inactiveColor: widget.layoutConfigs.backgroundSliderColor,
+                            activeColor: widget.layoutConfigs.sliderColor,
+                            onChanged: (val) {
+                              _onVolumeChanged(val);
+                            },
+                            value: _videoControllerService.value.volume,
+                            min: 0.0,
+                            max: 1.0,
                           ),
-                          onPressed: () {
-                            if (widget.isFullScreen) {
-                              Navigator.pop(
-                                  context, _videoPositionInMiliseconds);
-                            } else {
-                              widget.onFullScreen();
-                            }
-                          },
                         ),
-                      ),
-                    ],
+                        Spacer(),
+                        Visibility(
+                          visible: widget.layoutConfigs.showFullScreenButton,
+                          child: IconButton(
+                            icon: Icon(
+                              widget.isFullScreen ? Icons.close : Icons.crop_free,
+                              color: widget.layoutConfigs.iconsColor,
+                            ),
+                            onPressed: () {
+                              if (widget.isFullScreen) {
+                                Navigator.pop(context, _videoPositionInMiliseconds);
+                              } else {
+                                widget.onFullScreen();
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Spacer(),
-                _videoControllerService.controller != null
-                    ? Visibility(
-                        visible: widget.layoutConfigs.showVideoControl,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                _printDuration(Duration(
-                                    milliseconds: _videoPositionInMiliseconds)),
-                                style: TextStyle(
-                                    color: widget.layoutConfigs.iconsColor),
-                              ),
-                              Text(
-                                  _printDuration(
-                                      _videoControllerService.value.duration),
-                                  style: TextStyle(
-                                      color: widget.layoutConfigs.iconsColor)),
-                            ],
+                  Spacer(),
+                  _videoControllerService.controller != null
+                      ? Visibility(
+                          visible: widget.layoutConfigs.showVideoControl,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  _printDuration(Duration(milliseconds: _videoPositionInMiliseconds)),
+                                  style: TextStyle(color: widget.layoutConfigs.iconsColor),
+                                ),
+                                Text(_printDuration(_videoControllerService.value.duration),
+                                    style: TextStyle(color: widget.layoutConfigs.iconsColor)),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(),
-                Visibility(
-                  visible: widget.layoutConfigs.showVideoControl,
-                  child: Slider(
-                    inactiveColor: widget.layoutConfigs.backgroundSliderColor,
-                    activeColor: widget.layoutConfigs.sliderColor,
-                    value: _videoPositionInMiliseconds.toDouble(),
-                    onChanged: (value) {
-                      _onVideoPositionChanged(value);
-                    },
-                    min: 0.0,
-                    max: _videoControllerService.value.duration != null
-                        ? _videoControllerService.value.duration.inMilliseconds
-                            .toDouble()
-                        : _videoPositionInMiliseconds.toDouble(),
-                    label: 'Video',
+                        )
+                      : Container(),
+                  Visibility(
+                    visible: widget.layoutConfigs.showVideoControl,
+                    child: Slider(
+                      inactiveColor: widget.layoutConfigs.backgroundSliderColor,
+                      activeColor: widget.layoutConfigs.sliderColor,
+                      value: _videoPositionInMiliseconds.toDouble(),
+                      onChanged: (value) {
+                        _onVideoPositionChanged(value);
+                      },
+                      min: 0.0,
+                      max: _videoControllerService.value.duration != null
+                          ? _videoControllerService.value.duration.inMilliseconds.toDouble()
+                          : _videoPositionInMiliseconds.toDouble(),
+                      label: 'Video',
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          // Play/pause buttons
-          Visibility(
-            visible: _showControls,
-            child: Center(
-              child: IconButton(
-                iconSize: 80,
-                onPressed: () {
-                  _onPlayButtonPressed();
-                },
-                icon: Icon(
-                  _videoControllerService.value.isPlaying
-                      ? widget.layoutConfigs.pauseIcon
-                      : widget.layoutConfigs.playIcon,
-                  color: widget.layoutConfigs.iconsColor,
+            // Play/pause buttons
+            Visibility(
+              visible: _showControls,
+              child: Center(
+                child: IconButton(
+                  iconSize: 80,
+                  onPressed: () {
+                    _onPlayButtonPressed();
+                  },
+                  icon: Icon(
+                    _videoControllerService.value.isPlaying
+                        ? widget.layoutConfigs.pauseIcon
+                        : widget.layoutConfigs.playIcon,
+                    color: widget.layoutConfigs.iconsColor,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -232,8 +221,7 @@ class _KiddLayoutState extends State<KiddLayout> {
   /// in the bottom slider.
   void startStreaming() {
     this._videoControllerService.streamToProgress.listen((event) {
-      if (_videoControllerService.value.duration.inMilliseconds.toDouble() >
-          event.inMilliseconds.toDouble()) {
+      if (_videoControllerService.value.duration.inMilliseconds.toDouble() > event.inMilliseconds.toDouble()) {
         setState(() {
           _videoPositionInMiliseconds = event.inMilliseconds;
         });
@@ -295,8 +283,7 @@ class _KiddLayoutState extends State<KiddLayout> {
     onTapScreen();
     var duration = Duration(milliseconds: value.floor());
     _videoControllerService.seekTo(duration);
-    if (_videoControllerService.value.duration.inMilliseconds.toDouble() >
-        value.floor().toDouble()) {
+    if (_videoControllerService.value.duration.inMilliseconds.toDouble() > value.floor().toDouble()) {
       _videoPositionInMiliseconds = value.floor();
     }
     setState(() {});
