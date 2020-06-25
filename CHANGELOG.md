@@ -8,5 +8,12 @@
 * Flutter format to dart source files
 * Some issues fixed
 
+## [0.0.12] - 25/06
+
+* Example fixed
+* Readme fixed (url images)
+* gesture detector fixed
+* example fixed
+
 
 
