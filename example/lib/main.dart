@@ -1,5 +1,5 @@
-import 'package:example/example.dart';
 import 'package:flutter/material.dart';
+import 'package:kidd_video_player/kidd_video_player.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,7 +27,20 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ExamplePage(title: 'Some awesome app'),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Some awesome app'),
+        ),
+        body: Center(
+        child: Container(
+          height: 400,
+          child: KiddVideoPlayer(
+            fromUrl: true,
+            videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          ),
+        ),
+      ),
+      ) ,
     );
   }
 }
