@@ -137,13 +137,10 @@ This entry allows your app to access video files by URL.
 
 ## Screenshots
 <p align="center">
-	<img height="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot1.jpg">
+	<img height="300" src="https://raw.githubusercontent.com/MCarlomagno/kidd_video_player/master/assets/screenshot1.jpg">
 </p>
 <p align="center">
-	<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screenshot2.jpg">
-</p>
-<p align="center">
-	<img width="300" src="https://github.com/MCarlomagno/kidd_video_player/blob/master/assets/screen_gif1.gif">
+	<img width="300" src="https://raw.githubusercontent.com/MCarlomagno/kidd_video_player/master/assets/screenshot2.jpg">
 </p>
 
 ## Licence
