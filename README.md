@@ -1,5 +1,5 @@
 <p align="center">
-	<img height="300" src="https://github.com/MCarlomagno/flutter_core_architecture/blob/master/Kidd_kode.png">
+	<img height="300" src="https://raw.githubusercontent.com/MCarlomagno/flutter_core_architecture/master/Kidd_kode.png">
 </p>
 
 # kidd_video_player package
