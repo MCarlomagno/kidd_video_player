@@ -56,7 +56,7 @@ Let's code a simple example. Put the KiddVideoPlayer() class as a child of some 
 
 ## Considerations
 ### For Android:
-Be sure that the following line appears in the `<application ...>` tag located in `<project root>/android/app/src/main/Mainfest.xml`:
+Be sure that the following line appears in the `<application ...>` tag located in `<project root>/android/app/src/main/AndroidMainfest.xml`:
 ```
 <application 
     ...
